@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOPE DE BAR - San Miguel de Tucumán</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        barGold: '#f59e0b',
+                        darkSection: '#121212',
+                        darkBg: '#0a0a0a',
+                        darkCard: '#1a1a1a'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { transition: background-color 0.3s ease, color 0.3s ease; }
+        .hide-scrollbar::-webkit-scrollbar { height: 6px; }
+        .hide-scrollbar::-webkit-scrollbar-track { background: #e5e7eb; border-radius: 10px; }
+        .dark .hide-scrollbar::-webkit-scrollbar-track { background: #333; }
+        .hide-scrollbar::-webkit-scrollbar-thumb { background: #f59e0b; border-radius: 10px; }
+        
+        @keyframes slide {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); } 
+        }
+        .carousel-track {
+            display: flex;
+            width: max-content;
+            animation: slide 50s linear infinite;
+        }
+        .carousel-track:hover { animation-play-state: paused; }
+        .review-card { width: 340px; flex-shrink: 0; white-space: normal; }
+        .mask-edges {
+            mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+        }
+        .nav-logo { height: 42px; width: auto; object-fit: contain; }
+    </style>
+</head>
+<body class="antialiased font-sans bg-[#fcfcfc] text-[#111] dark:bg-darkBg dark:text-gray-100">
+
+    <audio id="move-sound" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3" preload="auto"></audio>
+
+    <nav class="flex justify-between items-center px-6 md:px-8 py-5 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-darkSection transition-colors sticky top-0 z-50">
+        <div class="flex items-center gap-3">
+            <img src="logo.png" alt="Logo" class="nav-logo">
+            <div class="font-bold text-xl tracking-tighter uppercase">TOPE <span class="text-barGold">DE BAR</span></div>
+        </div>
+        <div class="hidden md:flex space-x-8 text-[11px] font-bold tracking-widest text-gray-500 dark:text-gray-400">
+            <a href="#carta" class="hover:text-barGold transition-colors">LA CARTA</a>
+            <a href="#promos" class="hover:text-barGold transition-colors">PROMOS</a>
+            <a href="#ubicacion" class="hover:text-barGold transition-colors">UBICACIÓN</a>
+            <a href="#opiniones" class="hover:text-barGold transition-colors">OPINIONES</a>
+        </div>
+        <div class="flex items-center gap-3">
+            <button id="theme-toggle" class="p-2 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-yellow-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                <i class="fas fa-moon text-lg" id="theme-icon"></i>
+            </button>
+        </div>
+    </nav>
+
+    <section class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-gray-200 dark:divide-gray-800 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-darkSection text-center transition-colors">
+        <div class="py-8 md:py-12">
+            <p class="text-[11px] font-bold text-gray-500 tracking-widest mb-2">CAPACIDAD</p>
+            <p class="text-4xl md:text-5xl font-extrabold text-barGold">+120</p>
+        </div>
+        <div class="py-8 md:py-12">
+            <p class="text-[11px] font-bold text-gray-500 tracking-widest mb-2">COCTELERÍA</p>
+            <p class="text-4xl md:text-5xl font-extrabold text-barGold">NIVEL 1</p>
+        </div>
+        <div class="py-8 md:py-12">
+            <p class="text-[11px] font-bold text-gray-500 tracking-widest mb-2">HAPPY HOUR</p>
+            <p class="text-4xl md:text-5xl font-extrabold text-barGold">19-21HS</p>
+        </div>
+    </section>
+
+    <section class="py-12 md:py-16 px-6 md:px-8 max-w-7xl mx-auto">
+        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-end mb-8 md:mb-10 gap-4">
+            <div>
+                <p class="text-[11px] font-bold text-gray-500 tracking-widest mb-2">DISPONIBILIDAD</p>
+                <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight">Mapa de Mesas</h2>
+            </div>
+            <div class="sm:text-right">
+                <p class="text-[11px] font-bold text-gray-500 tracking-widest mb-1">LIBRES</p>
+                <p class="text-2xl md:text-3xl font-extrabold text-barGold">8/20</p>
+            </div>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3 md:gap-4" id="table-grid"></div>
+    </section>
+
+    <section id="promos" class="bg-white dark:bg-black py-16 px-6 md:px-8 transition-colors border-b border-gray-200 dark:border-none">
+        <div class="max-w-7xl mx-auto">
+            <p class="text-[11px] font-bold text-gray-500 dark:text-gray-400 tracking-widest mb-2">DISFRUTÁ MÁS</p>
+            <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-4 dark:text-white text-gray-900">Promos del Mes</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
+                <div class="bg-gray-100 dark:bg-darkCard p-6 rounded-2xl border border-gray-200 dark:border-gray-700 hover:border-barGold transition-colors">
+                    <h3 class="text-2xl font-bold mb-2 dark:text-white">After Office</h3>
+                    <p class="text-gray-500 dark:text-gray-400 font-medium mb-4">2 Pints de Cerveza + Papas</p>
+                    <p class="text-barGold font-extrabold text-2xl">$8.500</p>
+                </div>
+                <div class="bg-gray-100 dark:bg-darkCard p-6 rounded-2xl border border-gray-200 dark:border-gray-700 hover:border-barGold transition-colors">
+                    <h3 class="text-2xl font-bold mb-2 dark:text-white">Combo Amigos</h3>
+                    <p class="text-gray-500 dark:text-gray-400 font-medium mb-4">Pizza Especial + 2 Litros</p>
+                    <p class="text-barGold font-extrabold text-2xl">$14.000</p>
+                </div>
+                <div class="bg-gray-100 dark:bg-darkCard p-6 rounded-2xl border border-blue-500 relative transition-colors shadow-sm dark:shadow-[0_0_15px_rgba(59,130,246,0.2)]">
+                    <span class="absolute -top-3 right-4 bg-blue-500 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Cumpleaños</span>
+                    <h3 class="text-2xl font-bold mb-2 text-blue-600 dark:text-blue-400">Festejá acá! 🎂</h3>
+                    <p class="text-gray-500 dark:text-gray-400 font-medium mb-4">Brindis de regalo para el cumpleañero.</p>
+                    <p class="text-blue-600 dark:text-blue-400 font-extrabold text-xl">CONSULTAR</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="carta" class="py-16 px-6 md:px-8 max-w-7xl mx-auto overflow-hidden">
+        <p class="text-[11px] font-bold text-gray-500 tracking-widest mb-2">MENU DESTACADO</p>
+        <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-8">Nuestra Carta</h2>
+        <div class="flex overflow-x-auto gap-4 md:gap-6 pb-6 hide-scrollbar cursor-grab active:cursor-grabbing snap-x">
+            <div class="snap-start min-w-[260px] border border-gray-200 dark:border-gray-800 p-6 bg-gray-100 dark:bg-darkCard rounded-2xl hover:border-barGold transition-colors">
+                <p class="text-[10px] font-bold text-gray-400 tracking-widest mb-2 uppercase">Cocktail</p>
+                <h4 class="font-bold text-lg mb-8 leading-tight">Fernet Branca (Litro)</h4>
+                <p class="text-2xl font-extrabold text-barGold">$7.500</p>
+            </div>
+            <div class="snap-start min-w-[260px] border border-gray-200 dark:border-gray-800 p-6 bg-gray-100 dark:bg-darkCard rounded-2xl hover:border-barGold transition-colors">
+                <p class="text-[10px] font-bold text-gray-400 tracking-widest mb-2 uppercase">Cerveza</p>
+                <h4 class="font-bold text-lg mb-8 leading-tight">Pinta Artesanal</h4>
+                <p class="text-2xl font-extrabold text-barGold">$3.200</p>
+            </div>
+            <div class="snap-start min-w-[260px] border border-gray-200 dark:border-gray-800 p-6 bg-gray-100 dark:bg-darkCard rounded-2xl hover:border-barGold transition-colors">
+                <p class="text-[10px] font-bold text-gray-400 tracking-widest mb-2 uppercase">Comida</p>
+                <h4 class="font-bold text-lg mb-8 leading-tight">Papas Tope (Cheddar/Bacon)</h4>
+                <p class="text-2xl font-extrabold text-barGold">$5.800</p>
+            </div>
+            <div class="snap-start min-w-[260px] border border-gray-200 dark:border-gray-800 p-6 bg-gray-100 dark:bg-darkCard rounded-2xl hover:border-barGold transition-colors">
+                <p class="text-[10px] font-bold text-gray-400 tracking-widest mb-2 uppercase">Comida</p>
+                <h4 class="font-bold text-lg mb-8 leading-tight">Hamburguesa de la Casa</h4>
+                <p class="text-2xl font-extrabold text-barGold">$8.900</p>
+            </div>
+        </div>
+        <p class="text-[10px] text-gray-400 tracking-widest mt-2"><i class="fas fa-arrows-alt-h mr-1"></i> DESLIZA PARA VER MÁS</p>
+    </section>
+
+    <section id="opiniones" class="py-16 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 md:px-8 mb-8">
+            <p class="text-[11px] font-bold text-gray-500 tracking-widest mb-2">LO QUE DICEN</p>
+            <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight">Experiencias en Tope</h2>
+        </div>
+        <div class="relative w-full overflow-hidden mask-edges py-2">
+            <div class="carousel-track gap-4 md:gap-6 pr-4 md:pr-6" id="reviews-track"></div>
+        </div>
+    </section>
+
+    <footer id="ubicacion" class="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-darkSection transition-colors pt-16 pb-8 px-6 md:px-8 text-sm mt-4">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 mb-12">
+            <div>
+                <h3 class="font-bold text-[11px] text-gray-500 dark:text-gray-400 tracking-widest mb-4">DONDE ESTAMOS</h3>
+                <p class="mb-1 font-bold text-gray-800 dark:text-gray-200">Eduardo Bulnes 1978</p>
+                <p class="mb-1 text-gray-500 dark:text-gray-400">T4000 San Miguel de Tucumán</p>
+                <p class="mb-4 text-gray-500 dark:text-gray-400">Tucumán, Argentina</p>
+            </div>
+            <div>
+                <h3 class="font-bold text-[11px] text-gray-500 dark:text-gray-400 tracking-widest mb-4">HORARIOS</h3>
+                <div class="flex justify-between items-center border-b border-gray-100 dark:border-gray-800 pb-3 mb-3">
+                    <span class="font-bold text-[11px] tracking-widest dark:text-gray-200">MIÉRCOLES A DOMINGO</span>
+                    <span class="text-barGold font-bold text-[11px] tracking-widest">19:00 A 04:00</span>
+                </div>
+            </div>
+            <div>
+                <h3 class="font-bold text-[11px] text-gray-500 dark:text-gray-400 tracking-widest mb-4">RESERVAS</h3>
+                <a href="https://wa.me/5493816403488" target="_blank" class="inline-block bg-barGold text-black text-[11px] font-extrabold tracking-widest py-3 px-6 rounded-full hover:bg-yellow-600 transition-colors">
+                    <i class="fab fa-whatsapp mr-2 text-lg align-middle"></i> WHATSAPP
+                </a>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto text-center pt-8 border-t border-gray-100 dark:border-gray-800 text-[9px] font-bold text-gray-400 tracking-widest uppercase">
+            © 2026 TOPE DE BAR - TUCUMÁN STYLE
+        </div>
+    </footer>
+
+    <div id="review-modal" class="hidden fixed inset-0 z-[120] bg-black/70 flex items-center justify-center p-4 backdrop-blur-sm opacity-0 transition-opacity duration-300">
+        <div class="bg-white dark:bg-darkCard rounded-3xl p-6 md:p-8 max-w-lg w-full relative transform scale-95 transition-transform duration-300 shadow-2xl border border-gray-200 dark:border-gray-700" id="review-modal-content">
+            <button id="close-modal" class="absolute top-4 right-4 text-gray-400 hover:text-barGold transition-colors w-8 h-8 flex justify-center items-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-800">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            <div id="modal-stars" class="flex gap-1 mb-4"></div>
+            <h3 id="modal-name" class="font-bold text-xl md:text-2xl mb-4 dark:text-white"></h3>
+            <p id="modal-text" class="text-gray-600 dark:text-gray-300 text-base md:text-lg italic"></p>
+        </div>
+    </div>
+
+    <script>
+        const moveSound = document.getElementById('move-sound');
+        moveSound.volume = 0.4;
+        function playMove() { moveSound.currentTime = 0; moveSound.play().catch(()=>{}); }
+
+        // --- MAPA DE MESAS ---
+        const tableGrid = document.getElementById('table-grid');
+        for (let i = 1; i <= 20; i++) {
+            const tableNumber = i.toString().padStart(2, '0');
+            const isOccupied = Math.random() > 0.4;
+            const card = document.createElement('div');
+            card.className = `group border ${isOccupied ? 'border-gray-200 dark:border-gray-800' : 'border-barGold'} p-4 h-24 rounded-2xl relative overflow-hidden transition-all duration-300 hover:bg-barGold cursor-pointer bg-gray-100 dark:bg-darkCard`;
+            card.innerHTML = `
+                <div class="flex items-center space-x-2 group-hover:text-black transition-colors">
+                    <span class="w-2 h-2 rounded-full ${isOccupied ? 'bg-red-500' : 'bg-green-500'} group-hover:bg-black"></span>
+                    <span class="text-[10px] font-bold tracking-wider text-gray-600 dark:text-gray-400 group-hover:text-black">MESA ${tableNumber}</span>
+                </div>
+                <div class="mt-4">
+                    <p class="font-extrabold text-lg text-gray-900 dark:text-white group-hover:text-black">${isOccupied ? 'OCUPADA' : 'LIBRE'}</p>
+                </div>`;
+            tableGrid.appendChild(card);
+        }
+
+        // --- RESEÑAS ---
+        const reviews = [
+            { name: "Lucía Gomez", stars: 5, color: "text-yellow-400", text: "Los mejores cocktails de Tucumán, el ambiente es increíble para ir con amigos." },
+            { name: "Marcos R.", stars: 5, color: "text-yellow-400", text: "Muy buena la atención y las papas con cheddar son de otro mundo. 10/10." },
+            { name: "Sofi Cardozo", stars: 4, color: "text-yellow-400", text: "Lindo lugar, música a volumen justo para charlar. Los precios están muy bien." },
+            { name: "Cristian", stars: 5, color: "text-yellow-400", text: "Tope de bar literalmente, el nombre le queda pintado. Recomiendo el fernet de litro." }
+        ];
+
+        const reviewsTrack = document.getElementById('reviews-track');
+        [...reviews, ...reviews].forEach(review => {
+            const card = document.createElement('div');
+            card.className = "review-card border border-gray-200 dark:border-gray-800 p-6 bg-gray-100 dark:bg-darkCard rounded-2xl hover:border-barGold transition-colors flex flex-col gap-3 shadow-sm cursor-pointer";
+            card.onclick = () => openReviewModal(review);
+            card.innerHTML = `<h4 class="font-bold dark:text-white">${review.name}</h4><p class="text-sm italic line-clamp-3">"${review.text}"</p>`;
+            reviewsTrack.appendChild(card);
+        });
+
+        const reviewModal = document.getElementById('review-modal');
+        const modalContent = document.getElementById('review-modal-content');
+
+        function openReviewModal(review) {
+            playMove();
+            document.getElementById('modal-name').textContent = review.name;
+            document.getElementById('modal-text').textContent = `"${review.text}"`;
+            reviewModal.classList.remove('hidden');
+            setTimeout(() => { reviewModal.classList.remove('opacity-0'); modalContent.classList.replace('scale-95', 'scale-100'); }, 10);
+        }
+
+        function closeReviewModal() {
+            playMove();
+            reviewModal.classList.add('opacity-0');
+            modalContent.classList.replace('scale-100', 'scale-95');
+            setTimeout(() => reviewModal.classList.add('hidden'), 300);
+        }
+
+        document.getElementById('close-modal').onclick = closeReviewModal;
+
+        // --- TEMA ---
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        themeToggleBtn.onclick = () => {
+            playMove();
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.contains('dark');
+            themeIcon.className = isDark ? 'fas fa-sun text-lg text-yellow-400' : 'fas fa-moon text-lg';
+        };
+    </script>
+</body>
+</html>
